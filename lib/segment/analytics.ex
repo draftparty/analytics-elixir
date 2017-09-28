@@ -80,16 +80,17 @@ defmodule Segment.Analytics do
 
   defp post_to_segment(function, body) do
     Http.post(function, body)
-      |> log_result(function, body)
+    |> log_result(function, body)
   end
 
   defp log_result({_, %{status_code: code}}, function, body) when code in 200..299 do
     #success
-    Logger.debug("Segment #{function} call success: #{code} with body: #{body}")
+    # Don't log successes
+    #Logger.debug("Segment #{function} call success: #{code} with body: #{body}")
   end
 
   defp log_result({_, %{status_code: code}}, function, body) do
     #every other failure
-    Logger.debug("Segment #{function} call failed: #{code} with body: #{body}")
+    Logger.warn("Segment #{function} call failed: #{code} with body: #{body}")
   end
 end
